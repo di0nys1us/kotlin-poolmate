@@ -24,8 +24,15 @@ class UserServiceTest {
     }
 
     @Test
-    fun findUserRoles() {
-        val roles = userService.findUserRoles(1L)
+    fun findUserRolesByUserId() {
+        val roles = userService.findUserRolesByUserId(1L)
+
+        println(roles)
+    }
+
+    @Test
+    fun findUserRolesByRoleName() {
+        val roles = userService.findUserRolesByRoleName("ADMIN")
 
         println(roles)
     }

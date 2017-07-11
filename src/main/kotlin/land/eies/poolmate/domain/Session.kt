@@ -7,9 +7,11 @@ import javax.persistence.Entity
 @Entity
 data class Session(
         var id: Long?,
-        var changeInformation: ChangeInformation,
-        var user: User,
         var date: LocalDate,
         var poolLength: Int,
-        var calories: Int
+        var calories: Int,
+        var deleted: Boolean = false,
+        var version: Long?,
+        var user: User,
+        var changeInformation: ChangeInformation
 ) : Serializable

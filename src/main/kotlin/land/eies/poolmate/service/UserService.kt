@@ -14,5 +14,7 @@ class UserService(
 
     fun findUser(userId: Long) = userRepository.findById(userId)
 
-    fun findUserRoles(userId: Long) = userRoleRepository.findByPkUserId(userId)
+    fun findUserRolesByUserId(userId: Long) = userRoleRepository.findByPkUserId(userId)
+
+    fun findUserRolesByRoleName(roleName: String) = userRoleRepository.findByPkRoleName(roleName)
 }

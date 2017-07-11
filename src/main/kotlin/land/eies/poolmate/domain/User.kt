@@ -6,7 +6,6 @@ import javax.persistence.Entity
 @Entity
 data class User(
         var id: Long?,
-        var changeInformation: ChangeInformation,
         var firstName: String,
         var lastName: String,
         var email: String,
@@ -14,5 +13,8 @@ data class User(
         var accountExpired: Boolean = false,
         var accountLocked: Boolean = false,
         var credentialsExpired: Boolean = false,
-        var enabled: Boolean = true
+        var enabled: Boolean = true,
+        var deleted: Boolean = false,
+        var version: Long?,
+        var changeInformation: ChangeInformation
 ) : Serializable

@@ -23,6 +23,15 @@
             <id name="id">
                 <generated-value strategy="SEQUENCE" generator="role_id_gen"/>
             </id>
+            <basic name="name">
+                <column name="name" unique="true"/>
+            </basic>
+            <basic name="deleted">
+                <column name="deleted" nullable="false"/>
+            </basic>
+            <version name="version">
+                <column name="version" nullable="false"/>
+            </version>
             <embedded name="changeInformation"/>
         </attributes>
     </entity>
@@ -33,6 +42,21 @@
             <id name="id">
                 <generated-value strategy="SEQUENCE" generator="session_id_gen"/>
             </id>
+            <basic name="date">
+                <column name="date" nullable="false"/>
+            </basic>
+            <basic name="poolLength">
+                <column name="pool_length" nullable="false"/>
+            </basic>
+            <basic name="calories">
+                <column name="calories" nullable="false"/>
+            </basic>
+            <basic name="deleted">
+                <column name="deleted" nullable="false"/>
+            </basic>
+            <version name="version">
+                <column name="version" nullable="false"/>
+            </version>
             <many-to-one name="user" optional="false" fetch="EAGER">
                 <join-column name="user_id"/>
             </many-to-one>
@@ -46,6 +70,33 @@
             <id name="id">
                 <generated-value strategy="SEQUENCE" generator="session_set_id_gen"/>
             </id>
+            <basic name="number">
+                <column name="number" nullable="false"/>
+            </basic>
+            <basic name="swimmingTime">
+                <column name="swimming_time" nullable="false"/>
+            </basic>
+            <basic name="restTime">
+                <column name="rest_time" nullable="false"/>
+            </basic>
+            <basic name="laps">
+                <column name="laps" nullable="false"/>
+            </basic>
+            <basic name="averageStrokes">
+                <column name="average_strokes" nullable="false"/>
+            </basic>
+            <basic name="speed">
+                <column name="speed" nullable="false"/>
+            </basic>
+            <basic name="efficiencyIndex">
+                <column name="efficiency_index" nullable="false"/>
+            </basic>
+            <basic name="deleted">
+                <column name="deleted" nullable="false"/>
+            </basic>
+            <version name="version">
+                <column name="version" nullable="false"/>
+            </version>
             <many-to-one name="session" optional="false" fetch="EAGER">
                 <join-column name="session_id"/>
             </many-to-one>
@@ -68,6 +119,12 @@
             <basic name="email">
                 <column name="email" nullable="false" unique="true"/>
             </basic>
+            <basic name="deleted">
+                <column name="deleted" nullable="false"/>
+            </basic>
+            <version name="version">
+                <column name="version" nullable="false"/>
+            </version>
             <embedded name="changeInformation"/>
         </attributes>
     </entity>
@@ -76,6 +133,12 @@
         <table name="user_role"/>
         <attributes>
             <embedded-id name="pk"/>
+            <basic name="deleted">
+                <column name="deleted" nullable="false"/>
+            </basic>
+            <version name="version">
+                <column name="version" nullable="false"/>
+            </version>
             <embedded name="changeInformation"/>
         </attributes>
     </entity>
