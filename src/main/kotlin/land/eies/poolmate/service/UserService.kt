@@ -1,20 +1,9 @@
 package land.eies.poolmate.service
 
-import land.eies.poolmate.repository.UserRepository
-import land.eies.poolmate.repository.UserRoleRepository
-import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
+import land.eies.poolmate.service.dto.UserDTO
+import java.util.*
 
-@Service
-@Transactional
-class UserService(
-        val userRepository: UserRepository,
-        val userRoleRepository: UserRoleRepository
-) {
+interface UserService {
 
-    fun findUser(userId: Long) = userRepository.findById(userId)
-
-    fun findUserRolesByUserId(userId: Long) = userRoleRepository.findByPkUserId(userId)
-
-    fun findUserRolesByRoleName(roleName: String) = userRoleRepository.findByPkRoleName(roleName)
+    fun findUser(userId: Long): Optional<UserDTO>
 }

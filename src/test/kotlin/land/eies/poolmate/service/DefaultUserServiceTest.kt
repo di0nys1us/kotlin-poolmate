@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional
 @RunWith(SpringRunner::class)
 @SpringBootTest(classes = arrayOf(Application::class))
 @Transactional
-class UserServiceTest {
+class DefaultUserServiceTest {
 
     @Autowired
     lateinit var userService: UserService
@@ -21,19 +21,5 @@ class UserServiceTest {
         val user = userService.findUser(1L)
 
         println(user)
-    }
-
-    @Test
-    fun findUserRolesByUserId() {
-        val roles = userService.findUserRolesByUserId(1L)
-
-        println(roles)
-    }
-
-    @Test
-    fun findUserRolesByRoleName() {
-        val roles = userService.findUserRolesByRoleName("ADMIN")
-
-        println(roles)
     }
 }

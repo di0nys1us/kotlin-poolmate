@@ -1,10 +1,6 @@
 package land.eies.poolmate.repository
 
 import land.eies.poolmate.domain.User
-import org.springframework.data.repository.PagingAndSortingRepository
-import java.util.*
+import org.springframework.data.jpa.repository.JpaRepository
 
-interface UserRepository : PagingAndSortingRepository<User, Long> {
-
-    fun findByEmail(email: String): Optional<User>
-}
+interface UserRepository : JpaRepository<User, Long>

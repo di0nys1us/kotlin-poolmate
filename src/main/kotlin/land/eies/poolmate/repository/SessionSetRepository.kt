@@ -1,9 +1,6 @@
 package land.eies.poolmate.repository
 
 import land.eies.poolmate.domain.SessionSet
-import org.springframework.data.repository.PagingAndSortingRepository
+import org.springframework.data.jpa.repository.JpaRepository
 
-interface SessionSetRepository : PagingAndSortingRepository<SessionSet, Long> {
-
-    fun findBySessionId(sessionId: Long): List<SessionSet>
-}
+interface SessionSetRepository : JpaRepository<SessionSet, Long>

@@ -1,11 +1,10 @@
 package land.eies.poolmate.repository
 
 import land.eies.poolmate.domain.Session
-import org.springframework.data.repository.PagingAndSortingRepository
+import org.springframework.data.jpa.repository.JpaRepository
 import java.time.LocalDate
-import java.util.*
 
-interface SessionRepository : PagingAndSortingRepository<Session, Long> {
+interface SessionRepository : JpaRepository<Session, Long> {
 
-    fun findByDate(date: LocalDate): Optional<Session>
+    fun findByUserIdAndDateBetween(userId: Long, from: LocalDate, to: LocalDate): List<Session>
 }

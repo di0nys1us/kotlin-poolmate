@@ -2,11 +2,19 @@
 
 import path from "path";
 
-module.exports = {
+export default {
     entry: path.resolve(__dirname, './src/main/js/index.jsx'),
     output: {
         path: path.resolve(__dirname, './src/main/resources/public/build'),
-        publicPath: 'build',
+        publicPath: "build",
         filename: 'bundle.js'
+    },
+    module: {
+        loaders: [
+            {
+                test: /\.jsx?$/,
+                loader: 'babel-loader'
+            },
+        ]
     }
 };
