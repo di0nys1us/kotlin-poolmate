@@ -6,7 +6,7 @@
   "main": "src/main/js/index.js",
   "scripts": {
     "build": "webpack",
-    "start": "webpack-dev-server --inline --content-base src/main/resources/public/",
+    "start": "webpack-dev-server --port 9080 --inline --content-base src/main/resources/public/",
     "watch": "webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
