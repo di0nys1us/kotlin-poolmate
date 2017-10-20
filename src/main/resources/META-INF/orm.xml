@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
-                 version="2.1">
+<entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm" version="2.1">
 
     <persistence-unit-metadata>
         <xml-mapping-metadata-complete/>
@@ -12,29 +11,9 @@
 
     <package>land.eies.poolmate.domain</package>
 
-    <sequence-generator name="role_id_gen" sequence-name="role_id_seq" allocation-size="1"/>
     <sequence-generator name="session_id_gen" sequence-name="session_id_seq" allocation-size="1"/>
     <sequence-generator name="session_set_id_gen" sequence-name="session_set_id_seq" allocation-size="1"/>
     <sequence-generator name="user_id_gen" sequence-name="user_id_seq" allocation-size="1"/>
-
-    <entity class="Role">
-        <table name="role"/>
-        <attributes>
-            <id name="id">
-                <generated-value strategy="SEQUENCE" generator="role_id_gen"/>
-            </id>
-            <basic name="name">
-                <column name="name" unique="true"/>
-            </basic>
-            <basic name="deleted">
-                <column name="deleted" nullable="false"/>
-            </basic>
-            <version name="version">
-                <column name="version" nullable="false"/>
-            </version>
-            <embedded name="changeInformation"/>
-        </attributes>
-    </entity>
 
     <entity class="Session">
         <table name="session"/>
@@ -60,7 +39,6 @@
             <many-to-one name="user" optional="false" fetch="EAGER">
                 <join-column name="user_id"/>
             </many-to-one>
-            <embedded name="changeInformation"/>
         </attributes>
     </entity>
 
@@ -100,7 +78,6 @@
             <many-to-one name="session" optional="false" fetch="EAGER">
                 <join-column name="session_id"/>
             </many-to-one>
-            <embedded name="changeInformation"/>
         </attributes>
     </entity>
 
@@ -125,50 +102,7 @@
             <version name="version">
                 <column name="version" nullable="false"/>
             </version>
-            <embedded name="changeInformation"/>
         </attributes>
     </entity>
-
-    <entity class="UserRole">
-        <table name="user_role"/>
-        <attributes>
-            <embedded-id name="pk"/>
-            <basic name="deleted">
-                <column name="deleted" nullable="false"/>
-            </basic>
-            <version name="version">
-                <column name="version" nullable="false"/>
-            </version>
-            <embedded name="changeInformation"/>
-        </attributes>
-    </entity>
-
-    <embeddable class="ChangeInformation">
-        <attributes>
-            <basic name="createdBy">
-                <column name="created_by" nullable="false"/>
-            </basic>
-            <basic name="createdAt">
-                <column name="created_at" nullable="false"/>
-            </basic>
-            <basic name="modifiedBy">
-                <column name="modified_by" nullable="false"/>
-            </basic>
-            <basic name="modifiedAt">
-                <column name="modified_at" nullable="false"/>
-            </basic>
-        </attributes>
-    </embeddable>
-
-    <embeddable class="UserRolePK">
-        <attributes>
-            <many-to-one name="user" optional="false" fetch="EAGER">
-                <join-column name="user_id"/>
-            </many-to-one>
-            <many-to-one name="role" optional="false" fetch="EAGER">
-                <join-column name="role_id"/>
-            </many-to-one>
-        </attributes>
-    </embeddable>
 
 </entity-mappings>

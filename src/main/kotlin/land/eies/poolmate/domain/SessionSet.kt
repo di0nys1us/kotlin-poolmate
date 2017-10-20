@@ -14,8 +14,7 @@ data class SessionSet(
         var averageStrokes: Int,
         var speed: Int,
         var efficiencyIndex: Int,
-        var deleted: Boolean = false,
-        var version: Long?,
         var session: Session,
-        var changeInformation: ChangeInformation
+        var deleted: Boolean = false,
+        var version: Long?
 ) : Serializable

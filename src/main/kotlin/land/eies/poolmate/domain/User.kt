@@ -10,11 +10,7 @@ data class User(
         var lastName: String,
         var email: String,
         var hashedPassword: String,
-        var accountExpired: Boolean = false,
-        var accountLocked: Boolean = false,
-        var credentialsExpired: Boolean = false,
-        var enabled: Boolean = true,
+        var administrator: Boolean = false,
         var deleted: Boolean = false,
-        var version: Long?,
-        var changeInformation: ChangeInformation
+        var version: Long?
 ) : Serializable

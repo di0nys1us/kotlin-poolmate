@@ -10,8 +10,7 @@ data class Session(
         var date: LocalDate,
         var poolLength: Int,
         var calories: Int,
-        var deleted: Boolean = false,
-        var version: Long?,
         var user: User,
-        var changeInformation: ChangeInformation
+        var deleted: Boolean = false,
+        var version: Long?
 ) : Serializable

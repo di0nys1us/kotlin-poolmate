@@ -1,0 +1,36 @@
+schema {
+    query: Query
+}
+
+type Query {
+    user(id: ID!): User
+    session(id: ID!): Session
+    sessionSet(id: ID!): SessionSet
+}
+
+type User {
+    id: ID!
+    version: Long!
+    deleted: Boolean!
+    firstName: String!
+    lastName: String!
+    email: String!
+    administrator: Boolean!
+    sessions: [Session]
+}
+
+type Session {
+    id: ID!
+    version: Long!
+    deleted: Boolean!
+    date: String!
+    poolLength: Int!
+    calories: Int!
+    sessionSets: [SessionSet]
+}
+
+type SessionSet {
+    id: ID!
+    version: Long!
+    deleted: Boolean!
+}
