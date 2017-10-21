@@ -7,6 +7,8 @@ import javax.persistence.Entity
 @Entity
 data class SessionSet(
         var id: Long?,
+        var version: Long?,
+        var deleted: Boolean = false,
         var number: Int,
         var swimmingTime: Duration,
         var restTime: Duration,
@@ -14,7 +16,5 @@ data class SessionSet(
         var averageStrokes: Int,
         var speed: Int,
         var efficiencyIndex: Int,
-        var session: Session,
-        var deleted: Boolean = false,
-        var version: Long?
+        var session: Session
 ) : Serializable

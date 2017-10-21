@@ -6,11 +6,11 @@ import javax.persistence.Entity
 @Entity
 data class User(
         var id: Long?,
+        var version: Long?,
+        var deleted: Boolean = false,
         var firstName: String,
         var lastName: String,
         var email: String,
         var hashedPassword: String,
-        var administrator: Boolean = false,
-        var deleted: Boolean = false,
-        var version: Long?
+        var administrator: Boolean = false
 ) : Serializable
