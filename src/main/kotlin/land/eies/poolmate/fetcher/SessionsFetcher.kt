@@ -17,8 +17,10 @@ class SessionsFetcher(val sessionRepository: SessionRepository) : DataFetcher<Li
             return emptyList()
         }
 
-        val user = environment.getSource<User>()
+        if (environment.getSource<Any?>() is User) {
+            return sessionRepository.findByUserId(environment.getSource<User>().id!!)
+        }
 
-        return sessionRepository.findByUserId(user.id!!)
+        return emptyList()
     }
 }

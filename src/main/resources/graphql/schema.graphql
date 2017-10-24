@@ -1,3 +1,6 @@
+scalar TemporalAmount
+scalar TemporalAccessor
+
 schema {
     query: Query
 }
@@ -23,7 +26,7 @@ type Session {
     id: ID!
     version: Long!
     deleted: Boolean!
-    date: String!
+    date: TemporalAccessor!
     poolLength: Int!
     calories: Int!
     sessionSets: [SessionSet]
@@ -33,4 +36,12 @@ type SessionSet {
     id: ID!
     version: Long!
     deleted: Boolean!
+    number: Int!
+    swimmingTime: TemporalAmount!
+    restTime: TemporalAmount!
+    laps: Int!
+    averageStrokes: Int!
+    speed: Int!
+    efficiencyIndex: Int!
+    session: Session!
 }
