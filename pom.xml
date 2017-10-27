@@ -88,6 +88,12 @@
             <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.kotlintest</groupId>
+            <artifactId>kotlintest</artifactId>
+            <version>2.0.7</version>
+            <scope>test</scope>
+        </dependency>
 
         <!-- GraphQL -->
         <dependency>
@@ -99,6 +105,14 @@
             <groupId>com.graphql-java</groupId>
             <artifactId>graphiql-spring-boot-autoconfigure</artifactId>
             <version>3.9.2</version>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.8.0</version>
+            <scope>test></scope>
         </dependency>
     </dependencies>
 

@@ -1,48 +1,50 @@
 package land.eies.poolmate.configuration
 
 import graphql.schema.DataFetcher
-import graphql.schema.DataFetcherFactory
-import graphql.schema.TypeResolver
 import graphql.schema.idl.FieldWiringEnvironment
-import graphql.schema.idl.InterfaceWiringEnvironment
-import graphql.schema.idl.UnionWiringEnvironment
 import graphql.schema.idl.WiringFactory
+import land.eies.poolmate.graphql.GraphQLDataFetcher
+import land.eies.poolmate.graphql.GraphQLDataFetcherWiring
+import org.springframework.beans.factory.ListableBeanFactory
+import org.springframework.stereotype.Component
 
-class GraphQLSpringWiringFactory : WiringFactory {
+@Component
+class GraphQLSpringWiringFactory(val listableBeanFactory: ListableBeanFactory) : WiringFactory {
 
-    override fun getDefaultDataFetcher(environment: FieldWiringEnvironment?): DataFetcher<*> {
-        return super.getDefaultDataFetcher(environment)
-    }
+    fun resolveDataFetcher(fieldName: String, parentType: String): DataFetcher<*>? {
+        val candidates = listableBeanFactory.getBeansOfType(DataFetcher::class.java)
+                .filter { it.key != null && it.value != null }
+                .filter {
+                    listableBeanFactory.findAnnotationOnBean(it.key, GraphQLDataFetcherWiring::class.java).let {
+                        it != null && it.fieldName == fieldName && it.parentType == parentType
+                    } || listableBeanFactory.findAnnotationOnBean(it.key, GraphQLDataFetcher::class.java).let {
+                        it != null && it.value.any {
+                            it.fieldName == fieldName && it.parentType == parentType
+                        }
+                    }
+                }
+                .map { it.value }
 
-    override fun getDataFetcher(environment: FieldWiringEnvironment?): DataFetcher<*> {
-        return super.getDataFetcher(environment)
-    }
+        if (candidates.size > 1) {
+            throw IllegalStateException("${candidates.size} data fetchers defined for fieldName = \"$fieldName\" and parentType = \"$parentType\", expected only one")
+        }
 
-    override fun <T : Any?> getDataFetcherFactory(environment: FieldWiringEnvironment?): DataFetcherFactory<T> {
-        return super.getDataFetcherFactory(environment)
-    }
-
-    override fun providesDataFetcherFactory(environment: FieldWiringEnvironment?): Boolean {
-        return super.providesDataFetcherFactory(environment)
-    }
-
-    override fun getTypeResolver(environment: InterfaceWiringEnvironment?): TypeResolver {
-        return super.getTypeResolver(environment)
-    }
-
-    override fun getTypeResolver(environment: UnionWiringEnvironment?): TypeResolver {
-        return super.getTypeResolver(environment)
-    }
-
-    override fun providesTypeResolver(environment: InterfaceWiringEnvironment?): Boolean {
-        return super.providesTypeResolver(environment)
-    }
-
-    override fun providesTypeResolver(environment: UnionWiringEnvironment?): Boolean {
-        return super.providesTypeResolver(environment)
+        return candidates.firstOrNull()
     }
 
     override fun providesDataFetcher(environment: FieldWiringEnvironment?): Boolean {
-        return super.providesDataFetcher(environment)
+        if (environment == null) {
+            return super.providesDataFetcher(environment)
+        }
+
+        return resolveDataFetcher(environment.fieldDefinition.name, environment.parentType.name) != null
+    }
+
+    override fun getDataFetcher(environment: FieldWiringEnvironment?): DataFetcher<*> {
+        if (environment == null) {
+            return super.getDataFetcher(environment)
+        }
+
+        return resolveDataFetcher(environment.fieldDefinition.name, environment.parentType.name) ?: return super.getDataFetcher(environment)
     }
 }

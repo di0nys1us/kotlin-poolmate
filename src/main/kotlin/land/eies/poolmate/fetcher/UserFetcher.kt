@@ -3,11 +3,11 @@ package land.eies.poolmate.fetcher
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 import land.eies.poolmate.domain.User
+import land.eies.poolmate.graphql.GraphQLDataFetcherWiring
 import land.eies.poolmate.repository.UserRepository
-import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
-@Component
+@GraphQLDataFetcherWiring(fieldName = "user", parentType = "Query")
 @Transactional
 class UserFetcher(val userRepository: UserRepository) : DataFetcher<User?> {
 

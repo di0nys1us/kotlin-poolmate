@@ -17,5 +17,5 @@ spring:
       ddl-auto: validate
       use-new-id-generator-mappings: true
 
-flyway:
-  schemas: poolmate
+  flyway:
+    schemas: poolmate

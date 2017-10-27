@@ -4,11 +4,11 @@ import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 import land.eies.poolmate.domain.Session
 import land.eies.poolmate.domain.User
+import land.eies.poolmate.graphql.GraphQLDataFetcherWiring
 import land.eies.poolmate.repository.SessionRepository
-import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
-@Component
+@GraphQLDataFetcherWiring(fieldName = "sessions", parentType = "User")
 @Transactional
 class SessionsFetcher(val sessionRepository: SessionRepository) : DataFetcher<List<Session>> {
 
