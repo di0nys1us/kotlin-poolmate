@@ -2,9 +2,9 @@ package land.eies.poolmate.configuration
 
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
-import land.eies.poolmate.graphql.GraphQLDataFetcherWiring
 import land.eies.poolmate.graphql.GraphQLDataFetcher
-import org.assertj.core.api.Assertions.*
+import land.eies.poolmate.graphql.GraphQLDataFetcherWiring
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.ListableBeanFactory
@@ -23,11 +23,15 @@ class GraphQLSpringWiringFactoryTest {
 
     @Test
     fun resolveDataFetcher() {
-        graphQLSpringWiringFactory.resolveDataFetcher("fieldName", "parentType").let {
+        graphQLSpringWiringFactory.resolveDataFetcher("fieldNameA", "parentTypeA").let {
             assertThat(it).isSameAs(testDataFetcherA)
         }
 
-        graphQLSpringWiringFactory.resolveDataFetcher("fieldName", "parentType").let {
+        graphQLSpringWiringFactory.resolveDataFetcher("fieldNameB", "parentTypeB").let {
+            assertThat(it).isSameAs(testDataFetcherB)
+        }
+
+        graphQLSpringWiringFactory.resolveDataFetcher("fieldNameC", "parentTypeC").let {
             assertThat(it).isSameAs(testDataFetcherB)
         }
     }
@@ -51,17 +55,20 @@ class GraphQLSpringWiringFactoryTest {
         }
     }
 
-    @GraphQLDataFetcherWiring(fieldName = "fieldName", parentType = "parentType")
+    @GraphQLDataFetcherWiring(fieldName = "fieldNameA", parentType = "parentTypeA")
     object testDataFetcherA : DataFetcher<String> {
+
         override fun get(environment: DataFetchingEnvironment?): String {
             return "data"
         }
     }
 
     @GraphQLDataFetcher(arrayOf(
-            GraphQLDataFetcherWiring(fieldName = "fieldName", parentType = "parentType")
+            GraphQLDataFetcherWiring(fieldName = "fieldNameB", parentType = "parentTypeB"),
+            GraphQLDataFetcherWiring(fieldName = "fieldNameC", parentType = "parentTypeC")
     ))
     object testDataFetcherB : DataFetcher<String> {
+
         override fun get(environment: DataFetchingEnvironment?): String {
             return "data"
         }
