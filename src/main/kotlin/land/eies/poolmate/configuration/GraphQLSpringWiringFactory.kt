@@ -23,13 +23,12 @@ class GraphQLSpringWiringFactory(val listableBeanFactory: ListableBeanFactory) :
                         }
                     }
                 }
-                .map { it.value }
 
         if (candidates.size > 1) {
             throw IllegalStateException("${candidates.size} data fetchers defined for fieldName = \"$fieldName\" and parentType = \"$parentType\", expected only one")
         }
 
-        return candidates.firstOrNull()
+        return candidates.values.firstOrNull()
     }
 
     override fun providesDataFetcher(environment: FieldWiringEnvironment?): Boolean {
