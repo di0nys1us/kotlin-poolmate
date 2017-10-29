@@ -9,21 +9,16 @@ import land.eies.poolmate.repository.UserRepository
 import org.springframework.transaction.annotation.Transactional
 
 @GraphQLComponent(dataFetcherBindings = arrayOf(
-        GraphQLDataFetcherBinding(fieldName = "user", parentType = "Query")
+        GraphQLDataFetcherBinding(fieldName = "users", parentType = "Query")
 ))
 @Transactional
-class UserFetcher(val userRepository: UserRepository) : DataFetcher<User?> {
+class UsersFetcher(val userRepository: UserRepository) : DataFetcher<List<User>> {
 
-    override fun get(environment: DataFetchingEnvironment?): User? {
+    override fun get(environment: DataFetchingEnvironment?): List<User> {
         if (environment == null) {
-            return null
+            return emptyList()
         }
 
-        if (environment.containsArgument("id")) {
-            val id = environment.getArgument<String>("id")
-            return userRepository.getOne(id.toLong())
-        }
-
-        return null
+        return userRepository.findAll()
     }
 }

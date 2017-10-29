@@ -7,8 +7,11 @@ schema {
 
 type Query {
     user(id: ID!): User
+    users: [User]
     session(id: ID!): Session
+    sessions: [Session]
     sessionSet(id: ID!): SessionSet
+    sessionSets: [SessionSet]
 }
 
 type User {

@@ -6,6 +6,6 @@ import org.springframework.stereotype.Component
 @Retention(AnnotationRetention.RUNTIME)
 @MustBeDocumented
 @Component
-annotation class GraphQLDataFetcher(
-        val value: Array<GraphQLDataFetcherWiring>
+annotation class GraphQLComponent(
+        val dataFetcherBindings: Array<GraphQLDataFetcherBinding> = emptyArray()
 )

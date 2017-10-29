@@ -2,8 +2,8 @@ package land.eies.poolmate.configuration
 
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
-import land.eies.poolmate.graphql.GraphQLDataFetcher
-import land.eies.poolmate.graphql.GraphQLDataFetcherWiring
+import land.eies.poolmate.graphql.GraphQLComponent
+import land.eies.poolmate.graphql.GraphQLDataFetcherBinding
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -23,16 +23,16 @@ class GraphQLSpringWiringFactoryTest {
 
     @Test
     fun resolveDataFetcher() {
-        graphQLSpringWiringFactory.resolveDataFetcher("fieldNameA", "parentTypeA").let {
-            assertThat(it).isSameAs(testDataFetcherA)
+        graphQLSpringWiringFactory.resolveDataFetcher("fieldNameA", "parentTypeA").let { dataFetcher ->
+            assertThat(dataFetcher).isSameAs(testDataFetcherA)
         }
 
-        graphQLSpringWiringFactory.resolveDataFetcher("fieldNameB", "parentTypeB").let {
-            assertThat(it).isSameAs(testDataFetcherB)
+        graphQLSpringWiringFactory.resolveDataFetcher("fieldNameB", "parentTypeB").let { dataFetcher ->
+            assertThat(dataFetcher).isSameAs(testDataFetcherB)
         }
 
-        graphQLSpringWiringFactory.resolveDataFetcher("fieldNameC", "parentTypeC").let {
-            assertThat(it).isSameAs(testDataFetcherB)
+        graphQLSpringWiringFactory.resolveDataFetcher("fieldNameC", "parentTypeC").let { dataFetcher ->
+            assertThat(dataFetcher).isSameAs(testDataFetcherB)
         }
     }
 
@@ -50,12 +50,19 @@ class GraphQLSpringWiringFactoryTest {
         }
 
         @Bean
+        fun dataFetcherC(): DataFetcher<String> {
+            return testDataFetcherC
+        }
+
+        @Bean
         fun graphQLSpringWiringFactory(listableBeanFactory: ListableBeanFactory): GraphQLSpringWiringFactory {
             return GraphQLSpringWiringFactory(listableBeanFactory)
         }
     }
 
-    @GraphQLDataFetcherWiring(fieldName = "fieldNameA", parentType = "parentTypeA")
+    @GraphQLComponent(dataFetcherBindings = arrayOf(
+            GraphQLDataFetcherBinding(fieldName = "fieldNameA", parentType = "parentTypeA")
+    ))
     object testDataFetcherA : DataFetcher<String> {
 
         override fun get(environment: DataFetchingEnvironment?): String {
@@ -63,11 +70,18 @@ class GraphQLSpringWiringFactoryTest {
         }
     }
 
-    @GraphQLDataFetcher(arrayOf(
-            GraphQLDataFetcherWiring(fieldName = "fieldNameB", parentType = "parentTypeB"),
-            GraphQLDataFetcherWiring(fieldName = "fieldNameC", parentType = "parentTypeC")
+    @GraphQLComponent(dataFetcherBindings = arrayOf(
+            GraphQLDataFetcherBinding(fieldName = "fieldNameB", parentType = "parentTypeB"),
+            GraphQLDataFetcherBinding(fieldName = "fieldNameC", parentType = "parentTypeC")
     ))
     object testDataFetcherB : DataFetcher<String> {
+
+        override fun get(environment: DataFetchingEnvironment?): String {
+            return "data"
+        }
+    }
+
+    object testDataFetcherC : DataFetcher<String> {
 
         override fun get(environment: DataFetchingEnvironment?): String {
             return "data"

@@ -4,11 +4,15 @@ import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 import land.eies.poolmate.domain.Session
 import land.eies.poolmate.domain.User
-import land.eies.poolmate.graphql.GraphQLDataFetcherWiring
+import land.eies.poolmate.graphql.GraphQLComponent
+import land.eies.poolmate.graphql.GraphQLDataFetcherBinding
 import land.eies.poolmate.repository.SessionRepository
 import org.springframework.transaction.annotation.Transactional
 
-@GraphQLDataFetcherWiring(fieldName = "sessions", parentType = "User")
+@GraphQLComponent(dataFetcherBindings = arrayOf(
+        GraphQLDataFetcherBinding(fieldName = "sessions", parentType = "Query"),
+        GraphQLDataFetcherBinding(fieldName = "sessions", parentType = "User")
+))
 @Transactional
 class SessionsFetcher(val sessionRepository: SessionRepository) : DataFetcher<List<Session>> {
 
@@ -17,8 +21,13 @@ class SessionsFetcher(val sessionRepository: SessionRepository) : DataFetcher<Li
             return emptyList()
         }
 
+        if (environment.parentType.name == "Query") {
+            return sessionRepository.findAll()
+        }
+
         if (environment.getSource<Any?>() is User) {
-            return sessionRepository.findByUserId(environment.getSource<User>().id!!)
+            val user = environment.getSource<User>()
+            return sessionRepository.findByUserId(user.id!!)
         }
 
         return emptyList()
