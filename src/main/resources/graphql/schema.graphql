@@ -3,10 +3,11 @@ scalar TemporalAccessor
 
 schema {
     query: Query
+    mutation: Mutation
 }
 
 type Query {
-    user(id: ID!): User
+    user(id: Long!): User
     users: [User]
     session(id: ID!): Session
     sessions: [Session]
@@ -47,4 +48,16 @@ type SessionSet {
     speed: Int!
     efficiencyIndex: Int!
     session: Session!
+}
+
+type Mutation {
+    createUser(input: UserInput): User
+}
+
+input UserInput {
+    firstName: String
+    lastName: String
+    email: String
+    password: String
+    administrator: Boolean
 }

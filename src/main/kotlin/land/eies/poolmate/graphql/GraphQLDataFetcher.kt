@@ -7,5 +7,5 @@ import org.springframework.stereotype.Component
 @MustBeDocumented
 @Component
 annotation class GraphQLDataFetcher(
-        val bindings: Array<GraphQLDataFetcherBinding> = emptyArray()
+        val bindings: Array<GraphQLFieldBinding> = emptyArray()
 )

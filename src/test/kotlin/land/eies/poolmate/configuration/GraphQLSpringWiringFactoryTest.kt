@@ -3,7 +3,7 @@ package land.eies.poolmate.configuration
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 import land.eies.poolmate.graphql.GraphQLDataFetcher
-import land.eies.poolmate.graphql.GraphQLDataFetcherBinding
+import land.eies.poolmate.graphql.GraphQLFieldBinding
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -61,7 +61,7 @@ class GraphQLSpringWiringFactoryTest {
     }
 
     @GraphQLDataFetcher(bindings = arrayOf(
-            GraphQLDataFetcherBinding(fieldName = "fieldNameA", parentType = "parentTypeA")
+            GraphQLFieldBinding(fieldName = "fieldNameA", parentType = "parentTypeA")
     ))
     object testDataFetcherA : DataFetcher<String> {
 
@@ -71,8 +71,8 @@ class GraphQLSpringWiringFactoryTest {
     }
 
     @GraphQLDataFetcher(bindings = arrayOf(
-            GraphQLDataFetcherBinding(fieldName = "fieldNameB", parentType = "parentTypeB"),
-            GraphQLDataFetcherBinding(fieldName = "fieldNameC", parentType = "parentTypeC")
+            GraphQLFieldBinding(fieldName = "fieldNameB", parentType = "parentTypeB"),
+            GraphQLFieldBinding(fieldName = "fieldNameC", parentType = "parentTypeC")
     ))
     object testDataFetcherB : DataFetcher<String> {
 
