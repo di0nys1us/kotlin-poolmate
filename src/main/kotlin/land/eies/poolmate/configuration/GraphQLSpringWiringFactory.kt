@@ -3,7 +3,7 @@ package land.eies.poolmate.configuration
 import graphql.schema.DataFetcher
 import graphql.schema.idl.FieldWiringEnvironment
 import graphql.schema.idl.WiringFactory
-import land.eies.poolmate.graphql.GraphQLComponent
+import land.eies.poolmate.graphql.GraphQLDataFetcher
 import org.springframework.beans.factory.ListableBeanFactory
 import org.springframework.stereotype.Component
 
@@ -13,8 +13,8 @@ class GraphQLSpringWiringFactory(val listableBeanFactory: ListableBeanFactory) :
     fun resolveDataFetcher(fieldName: String, parentType: String): DataFetcher<*>? {
         val candidates = listableBeanFactory.getBeansOfType(DataFetcher::class.java)
                 .filter { beanEntry ->
-                    listableBeanFactory.findAnnotationOnBean(beanEntry.key, GraphQLComponent::class.java).let { annotation ->
-                        annotation != null && annotation.dataFetcherBindings.any { binding ->
+                    listableBeanFactory.findAnnotationOnBean(beanEntry.key, GraphQLDataFetcher::class.java).let { annotation ->
+                        annotation != null && annotation.bindings.any { binding ->
                             binding.fieldName == fieldName && binding.parentType == parentType
                         }
                     }

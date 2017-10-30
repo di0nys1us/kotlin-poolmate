@@ -3,12 +3,12 @@ package land.eies.poolmate.fetcher
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 import land.eies.poolmate.domain.Session
-import land.eies.poolmate.graphql.GraphQLComponent
+import land.eies.poolmate.graphql.GraphQLDataFetcher
 import land.eies.poolmate.graphql.GraphQLDataFetcherBinding
 import land.eies.poolmate.repository.SessionRepository
 import org.springframework.transaction.annotation.Transactional
 
-@GraphQLComponent(dataFetcherBindings = arrayOf(
+@GraphQLDataFetcher(bindings = arrayOf(
         GraphQLDataFetcherBinding(fieldName = "session", parentType = "Query")
 ))
 @Transactional
