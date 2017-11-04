@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("graphql")
-class GraphQLResource(val graphQL: GraphQL) {
+class GraphQLResource(private val graphQL: GraphQL) {
 
     @GetMapping
     fun get(executionInputSupplier: ExecutionInputSupplier): ResponseEntity<Any> {

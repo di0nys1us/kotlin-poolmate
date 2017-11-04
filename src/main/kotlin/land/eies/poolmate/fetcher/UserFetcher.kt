@@ -1,5 +1,6 @@
 package land.eies.poolmate.fetcher
 
+import graphql.GraphQLException
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 import land.eies.poolmate.domain.User
@@ -12,17 +13,13 @@ import org.springframework.transaction.annotation.Transactional
         GraphQLFieldBinding(fieldName = "user", parentType = "Query")
 ))
 @Transactional
-class UserFetcher(val userRepository: UserRepository) : DataFetcher<User?> {
+class UserFetcher(val userRepository: UserRepository) : DataFetcher<User> {
 
-    override fun get(environment: DataFetchingEnvironment?): User? {
+    override fun get(environment: DataFetchingEnvironment?): User {
         if (environment == null) {
-            return null
+            throw GraphQLException("environment was null")
         }
 
-        if (environment.containsArgument("id")) {
-            return userRepository.getOne(environment.getArgument("id"))
-        }
-
-        return null
+        return userRepository.getOne(environment.getId())
     }
 }

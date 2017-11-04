@@ -1,14 +1,12 @@
 package land.eies.poolmate.configuration
 
 import graphql.GraphQL
-import graphql.execution.instrumentation.fieldvalidation.FieldValidationInstrumentation
 import graphql.schema.GraphQLSchema
 import graphql.schema.idl.RuntimeWiring
 import graphql.schema.idl.SchemaGenerator
 import graphql.schema.idl.SchemaParser
 import graphql.schema.idl.TypeDefinitionRegistry
 import land.eies.poolmate.scalar.Scalars
-import land.eies.poolmate.validation.IdValidation
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -44,7 +42,6 @@ class GraphQLSpringConfiguration {
     @Bean
     fun graphQL(graphQLSchema: GraphQLSchema): GraphQL {
         return GraphQL.newGraphQL(graphQLSchema)
-                .instrumentation(FieldValidationInstrumentation(IdValidation()))
                 .build()
     }
 }

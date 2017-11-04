@@ -14,8 +14,8 @@ import org.springframework.transaction.annotation.Transactional
 ))
 @Transactional
 class CreateUserMutation(
-        val objectMapper: ObjectMapper,
-        val userRepository: UserRepository
+        private val objectMapper: ObjectMapper,
+        private val userRepository: UserRepository
 ) : DataFetcher<User?> {
 
     override fun get(environment: DataFetchingEnvironment?): User? {
