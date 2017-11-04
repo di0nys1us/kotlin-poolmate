@@ -1,5 +1,5 @@
-scalar TemporalAmount
-scalar TemporalAccessor
+scalar Duration
+scalar LocalDate
 
 schema {
     query: Query
@@ -8,41 +8,41 @@ schema {
 
 type Query {
     user(id: Long!): User
-    users: [User]
-    session(id: ID!): Session
-    sessions: [Session]
-    sessionSet(id: ID!): SessionSet
-    sessionSets: [SessionSet]
+    users: [User!]!
+    session(id: Long!): Session
+    sessions(range: DateRange): [Session!]!
+    sessionSet(id: Long!): SessionSet
+    sessionSets: [SessionSet!]!
 }
 
 type User {
-    id: ID!
+    id: Long!
     version: Long!
     deleted: Boolean!
     firstName: String!
     lastName: String!
     email: String!
     administrator: Boolean!
-    sessions: [Session]
+    sessions(range: DateRange): [Session!]!
 }
 
 type Session {
-    id: ID!
+    id: Long!
     version: Long!
     deleted: Boolean!
-    date: TemporalAccessor!
+    date: LocalDate!
     poolLength: Int!
     calories: Int!
-    sessionSets: [SessionSet]
+    sessionSets: [SessionSet!]!
 }
 
 type SessionSet {
-    id: ID!
+    id: Long!
     version: Long!
     deleted: Boolean!
     number: Int!
-    swimmingTime: TemporalAmount!
-    restTime: TemporalAmount!
+    swimmingTime: Duration!
+    restTime: Duration!
     laps: Int!
     averageStrokes: Int!
     speed: Int!
@@ -51,13 +51,18 @@ type SessionSet {
 }
 
 type Mutation {
-    createUser(input: UserInput): User
+    createUser(input: UserInput!): User
 }
 
 input UserInput {
-    firstName: String
-    lastName: String
-    email: String
-    password: String
-    administrator: Boolean
+    firstName: String!
+    lastName: String!
+    email: String!
+    password: String!
+    administrator: Boolean!
+}
+
+input DateRange {
+    minimum: LocalDate!
+    maximum: LocalDate!
 }

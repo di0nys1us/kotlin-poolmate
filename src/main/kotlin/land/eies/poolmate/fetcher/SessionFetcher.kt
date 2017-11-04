@@ -1,5 +1,6 @@
 package land.eies.poolmate.fetcher
 
+import graphql.GraphQLException
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 import land.eies.poolmate.domain.Session
@@ -12,18 +13,15 @@ import org.springframework.transaction.annotation.Transactional
         GraphQLFieldBinding(fieldName = "session", parentType = "Query")
 ))
 @Transactional
-class SessionFetcher(val sessionRepository: SessionRepository) : DataFetcher<Session?> {
+class SessionFetcher(val sessionRepository: SessionRepository) : DataFetcher<Session> {
 
-    override fun get(environment: DataFetchingEnvironment?): Session? {
+    override fun get(environment: DataFetchingEnvironment?): Session {
         if (environment == null) {
-            return null
+            throw GraphQLException("environment was null")
         }
 
-        if (environment.containsArgument("id")) {
-            val id = environment.getArgument<String>("id")
-            return sessionRepository.getOne(id.toLong())
+        environment.getId().let {
+            return sessionRepository.getOne(it)
         }
-
-        return null
     }
 }
