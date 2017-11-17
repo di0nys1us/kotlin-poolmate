@@ -1,4 +1,4 @@
-package land.eies.poolmate.graphql
+package land.eies.graphql.annotation
 
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)

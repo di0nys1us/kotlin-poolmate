@@ -5,8 +5,8 @@ import javax.persistence.Entity
 
 @Entity
 data class User(
-        var id: Long?,
-        var version: Long?,
+        var id: Long? = null,
+        var version: Long? = null,
         var deleted: Boolean = false,
         var firstName: String,
         var lastName: String,

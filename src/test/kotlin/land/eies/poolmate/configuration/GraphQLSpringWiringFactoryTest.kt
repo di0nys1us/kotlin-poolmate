@@ -2,8 +2,8 @@ package land.eies.poolmate.configuration
 
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
-import land.eies.poolmate.graphql.GraphQLDataFetcher
-import land.eies.poolmate.graphql.GraphQLFieldBinding
+import land.eies.graphql.annotation.GraphQLDataFetcher
+import land.eies.graphql.annotation.GraphQLFieldBinding
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith

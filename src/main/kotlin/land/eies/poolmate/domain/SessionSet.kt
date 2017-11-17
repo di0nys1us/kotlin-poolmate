@@ -6,8 +6,8 @@ import javax.persistence.Entity
 
 @Entity
 data class SessionSet(
-        var id: Long?,
-        var version: Long?,
+        var id: Long? = null,
+        var version: Long? = null,
         var deleted: Boolean = false,
         var number: Int,
         var swimmingTime: Duration,

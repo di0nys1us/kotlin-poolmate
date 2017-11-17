@@ -1,4 +1,4 @@
-package land.eies.poolmate.graphql
+package land.eies.graphql
 
 import graphql.ExecutionInput
 import java.util.function.Supplier

@@ -1,4 +1,4 @@
-package land.eies.poolmate.graphql
+package land.eies.graphql.annotation
 
 import org.springframework.stereotype.Component
 

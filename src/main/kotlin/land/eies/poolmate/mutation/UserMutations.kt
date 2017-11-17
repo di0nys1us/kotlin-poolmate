@@ -3,11 +3,24 @@ package land.eies.poolmate.mutation
 import com.fasterxml.jackson.databind.ObjectMapper
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
+import land.eies.graphql.annotation.GraphQLDataFetcher
+import land.eies.graphql.annotation.GraphQLFieldBinding
 import land.eies.poolmate.domain.User
-import land.eies.poolmate.graphql.GraphQLDataFetcher
-import land.eies.poolmate.graphql.GraphQLFieldBinding
 import land.eies.poolmate.repository.UserRepository
 import org.springframework.transaction.annotation.Transactional
+import java.io.Serializable
+
+data class CreateUserInput(
+        val firstName: String,
+        val lastName: String,
+        val email: String,
+        val password: String,
+        val administrator: Boolean
+) : Serializable
+
+data class CreateUserOutput(
+        val user: User? = null
+) : Serializable
 
 @GraphQLDataFetcher(bindings = arrayOf(
         GraphQLFieldBinding(fieldName = "createUser", parentType = "Mutation")
@@ -24,10 +37,7 @@ class CreateUserMutation(
         }
 
         if (environment.containsArgument("input")) {
-            val inputMap = environment.getArgument<Map<String, String>>("input").toMutableMap()
-            inputMap["hashedPassword"] = inputMap["password"]!!
-            val user = objectMapper.convertValue(inputMap, User::class.java)
-            return userRepository.save(user)
+            return userRepository.save(null)
         }
 
         return null
