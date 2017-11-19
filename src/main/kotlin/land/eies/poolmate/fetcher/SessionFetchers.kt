@@ -1,6 +1,5 @@
 package land.eies.poolmate.fetcher
 
-import graphql.GraphQLException
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 import land.eies.graphql.annotation.GraphQLDataFetcher
@@ -18,7 +17,7 @@ class SessionFetcher(private val sessionRepository: SessionRepository) : DataFet
 
     override fun get(environment: DataFetchingEnvironment?): Session {
         if (environment == null) {
-            throw GraphQLException("environment was null")
+            missingEnvironment()
         }
 
         return sessionRepository.getOne(environment.getId())
@@ -34,7 +33,7 @@ class SessionsFetcher(private val sessionRepository: SessionRepository) : DataFe
 
     override fun get(environment: DataFetchingEnvironment?): List<Session> {
         if (environment == null) {
-            throw GraphQLException("environment was null")
+            missingEnvironment()
         }
 
         if (environment.parentType.name == "Query") {
