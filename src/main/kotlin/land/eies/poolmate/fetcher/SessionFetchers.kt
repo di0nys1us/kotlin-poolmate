@@ -11,6 +11,21 @@ import land.eies.poolmate.repository.SessionRepository
 import org.springframework.transaction.annotation.Transactional
 
 @GraphQLDataFetcher(bindings = arrayOf(
+        GraphQLFieldBinding(fieldName = "session", parentType = "Query")
+))
+@Transactional
+class SessionFetcher(private val sessionRepository: SessionRepository) : DataFetcher<Session> {
+
+    override fun get(environment: DataFetchingEnvironment?): Session {
+        if (environment == null) {
+            throw GraphQLException("environment was null")
+        }
+
+        return sessionRepository.getOne(environment.getId())
+    }
+}
+
+@GraphQLDataFetcher(bindings = arrayOf(
         GraphQLFieldBinding(fieldName = "sessions", parentType = "Query"),
         GraphQLFieldBinding(fieldName = "sessions", parentType = "User")
 ))

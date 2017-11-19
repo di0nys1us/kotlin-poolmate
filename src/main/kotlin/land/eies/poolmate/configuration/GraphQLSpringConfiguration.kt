@@ -1,12 +1,16 @@
 package land.eies.poolmate.configuration
 
 import graphql.GraphQL
+import graphql.execution.instrumentation.fieldvalidation.FieldValidationInstrumentation
+import graphql.execution.instrumentation.fieldvalidation.SimpleFieldValidation
 import graphql.schema.GraphQLSchema
 import graphql.schema.idl.RuntimeWiring
 import graphql.schema.idl.SchemaGenerator
 import graphql.schema.idl.SchemaParser
 import graphql.schema.idl.TypeDefinitionRegistry
+import land.eies.graphql.GraphQLSpringWiringFactory
 import land.eies.poolmate.scalar.Scalars
+import org.springframework.beans.factory.ListableBeanFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -26,22 +30,20 @@ class GraphQLSpringConfiguration {
     }
 
     @Bean
-    fun runtimeWiring(graphQLSpringWiringFactory: GraphQLSpringWiringFactory): RuntimeWiring {
-        return RuntimeWiring.newRuntimeWiring()
-                .scalar(Scalars.GraphQLDuration)
-                .scalar(Scalars.GraphQLLocalDate)
-                .wiringFactory(graphQLSpringWiringFactory)
-                .build()
-    }
+    fun runtimeWiring(listableBeanFactory: ListableBeanFactory): RuntimeWiring =
+            RuntimeWiring.newRuntimeWiring()
+                    .scalar(Scalars.GraphQLDuration)
+                    .scalar(Scalars.GraphQLLocalDate)
+                    .wiringFactory(GraphQLSpringWiringFactory(listableBeanFactory))
+                    .build()
 
     @Bean
-    fun graphQLSchema(typeDefinitionRegistry: TypeDefinitionRegistry, runtimeWiring: RuntimeWiring): GraphQLSchema {
-        return SchemaGenerator().makeExecutableSchema(typeDefinitionRegistry, runtimeWiring)
-    }
+    fun graphQLSchema(typeDefinitionRegistry: TypeDefinitionRegistry, runtimeWiring: RuntimeWiring): GraphQLSchema =
+            SchemaGenerator().makeExecutableSchema(typeDefinitionRegistry, runtimeWiring)
 
     @Bean
-    fun graphQL(graphQLSchema: GraphQLSchema): GraphQL {
-        return GraphQL.newGraphQL(graphQLSchema)
-                .build()
-    }
+    fun graphQL(graphQLSchema: GraphQLSchema): GraphQL =
+            GraphQL.newGraphQL(graphQLSchema)
+                    .instrumentation(FieldValidationInstrumentation(SimpleFieldValidation()))
+                    .build()
 }

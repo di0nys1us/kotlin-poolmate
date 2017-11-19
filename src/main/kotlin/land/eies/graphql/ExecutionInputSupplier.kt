@@ -11,7 +11,5 @@ data class ExecutionInputSupplier(
         private val variables: MutableMap<String, Any>?
 ) : Supplier<ExecutionInput> {
 
-    override fun get(): ExecutionInput {
-        return ExecutionInput(query, operationName, context, root, variables)
-    }
+    override fun get(): ExecutionInput = ExecutionInput(query, operationName, context, root, variables)
 }

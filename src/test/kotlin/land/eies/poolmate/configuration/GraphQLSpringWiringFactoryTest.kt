@@ -2,6 +2,7 @@ package land.eies.poolmate.configuration
 
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
+import land.eies.graphql.GraphQLSpringWiringFactory
 import land.eies.graphql.annotation.GraphQLDataFetcher
 import land.eies.graphql.annotation.GraphQLFieldBinding
 import org.assertj.core.api.Assertions.assertThat
@@ -24,15 +25,15 @@ class GraphQLSpringWiringFactoryTest {
     @Test
     fun resolveDataFetcher() {
         graphQLSpringWiringFactory.resolveDataFetcher("fieldNameA", "parentTypeA").let { dataFetcher ->
-            assertThat(dataFetcher).isSameAs(testDataFetcherA)
+            assertThat(dataFetcher).isSameAs(TestDataFetcherA)
         }
 
         graphQLSpringWiringFactory.resolveDataFetcher("fieldNameB", "parentTypeB").let { dataFetcher ->
-            assertThat(dataFetcher).isSameAs(testDataFetcherB)
+            assertThat(dataFetcher).isSameAs(TestDataFetcherB)
         }
 
         graphQLSpringWiringFactory.resolveDataFetcher("fieldNameC", "parentTypeC").let { dataFetcher ->
-            assertThat(dataFetcher).isSameAs(testDataFetcherB)
+            assertThat(dataFetcher).isSameAs(TestDataFetcherB)
         }
     }
 
@@ -40,51 +41,38 @@ class GraphQLSpringWiringFactoryTest {
     class TestConfiguration {
 
         @Bean
-        fun dataFetcherA(): DataFetcher<String> {
-            return testDataFetcherA
-        }
+        fun dataFetcherA(): DataFetcher<String> = TestDataFetcherA
 
         @Bean
-        fun dataFetcherB(): DataFetcher<String> {
-            return testDataFetcherB
-        }
+        fun dataFetcherB(): DataFetcher<String> = TestDataFetcherB
 
         @Bean
-        fun dataFetcherC(): DataFetcher<String> {
-            return testDataFetcherC
-        }
+        fun dataFetcherC(): DataFetcher<String> = TestDataFetcherC
 
         @Bean
-        fun graphQLSpringWiringFactory(listableBeanFactory: ListableBeanFactory): GraphQLSpringWiringFactory {
-            return GraphQLSpringWiringFactory(listableBeanFactory)
-        }
+        fun graphQLSpringWiringFactory(listableBeanFactory: ListableBeanFactory): GraphQLSpringWiringFactory =
+                GraphQLSpringWiringFactory(listableBeanFactory)
     }
 
     @GraphQLDataFetcher(bindings = arrayOf(
             GraphQLFieldBinding(fieldName = "fieldNameA", parentType = "parentTypeA")
     ))
-    object testDataFetcherA : DataFetcher<String> {
+    object TestDataFetcherA : DataFetcher<String> {
 
-        override fun get(environment: DataFetchingEnvironment?): String {
-            return "data"
-        }
+        override fun get(environment: DataFetchingEnvironment?): String = "data"
     }
 
     @GraphQLDataFetcher(bindings = arrayOf(
             GraphQLFieldBinding(fieldName = "fieldNameB", parentType = "parentTypeB"),
             GraphQLFieldBinding(fieldName = "fieldNameC", parentType = "parentTypeC")
     ))
-    object testDataFetcherB : DataFetcher<String> {
+    object TestDataFetcherB : DataFetcher<String> {
 
-        override fun get(environment: DataFetchingEnvironment?): String {
-            return "data"
-        }
+        override fun get(environment: DataFetchingEnvironment?): String = "data"
     }
 
-    object testDataFetcherC : DataFetcher<String> {
+    object TestDataFetcherC : DataFetcher<String> {
 
-        override fun get(environment: DataFetchingEnvironment?): String {
-            return "data"
-        }
+        override fun get(environment: DataFetchingEnvironment?): String = "data"
     }
 }

@@ -7,12 +7,12 @@ schema {
 }
 
 type Query {
-    user(id: Long!): User
+    user(id: Long, email: String): User
     users: [User!]!
     session(id: Long!): Session
     sessions(range: DateRange): [Session!]!
     sessionSet(id: Long!): SessionSet
-    sessionSets: [SessionSet!]!
+    sessionSets(sessionId: Long): [SessionSet!]!
 }
 
 type User {

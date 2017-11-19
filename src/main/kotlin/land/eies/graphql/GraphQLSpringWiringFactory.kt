@@ -1,13 +1,11 @@
-package land.eies.poolmate.configuration
+package land.eies.graphql
 
 import graphql.schema.DataFetcher
 import graphql.schema.idl.FieldWiringEnvironment
 import graphql.schema.idl.WiringFactory
 import land.eies.graphql.annotation.GraphQLDataFetcher
 import org.springframework.beans.factory.ListableBeanFactory
-import org.springframework.stereotype.Component
 
-@Component
 class GraphQLSpringWiringFactory(val listableBeanFactory: ListableBeanFactory) : WiringFactory {
 
     fun resolveDataFetcher(fieldName: String, parentType: String): DataFetcher<*>? {
