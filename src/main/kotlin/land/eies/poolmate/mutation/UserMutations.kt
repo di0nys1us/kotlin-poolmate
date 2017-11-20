@@ -5,6 +5,7 @@ import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 import land.eies.graphql.annotation.GraphQLDataFetcher
 import land.eies.graphql.annotation.GraphQLFieldBinding
+import land.eies.graphql.validation.ValidationException
 import land.eies.poolmate.domain.User
 import land.eies.poolmate.repository.UserRepository
 import org.springframework.transaction.annotation.Transactional
@@ -19,8 +20,7 @@ data class CreateUserInput(
         val firstName: String,
         @get:NotBlank
         val lastName: String,
-        @get:NotBlank
-        @get:Email
+        @get:NotBlank @get:Email
         val email: String,
         @get:NotBlank
         val password: String,
@@ -29,7 +29,7 @@ data class CreateUserInput(
 ) : Serializable
 
 data class CreateUserOutput(
-        val user: User? = null
+        val user: User?
 ) : Serializable
 
 @GraphQLDataFetcher(bindings = arrayOf(
@@ -40,11 +40,11 @@ class CreateUserMutation(
         private val objectMapper: ObjectMapper,
         private val validator: Validator,
         private val userRepository: UserRepository
-) : DataFetcher<User?> {
+) : DataFetcher<CreateUserOutput> {
 
-    override fun get(environment: DataFetchingEnvironment?): User? {
+    override fun get(environment: DataFetchingEnvironment?): CreateUserOutput {
         if (environment == null) {
-            return null
+            return CreateUserOutput(null)
         }
 
         if (environment.containsArgument("input")) {
@@ -53,11 +53,23 @@ class CreateUserMutation(
                     CreateUserInput::class.java
             )
 
-            val violations = validator.validate(input)
+            val violations = validator.validate<Any?>(input)
 
-            return userRepository.save(null)
+            if (violations.isNotEmpty()) {
+                throw ValidationException(violations)
+            }
+
+            val user = User(
+                    firstName = input.firstName,
+                    lastName = input.lastName,
+                    email = input.email,
+                    hashedPassword = input.password, // TODO Password hashing
+                    administrator = input.administrator
+            )
+
+            return CreateUserOutput(userRepository.save(user))
         }
 
-        return null
+        return CreateUserOutput(null)
     }
 }

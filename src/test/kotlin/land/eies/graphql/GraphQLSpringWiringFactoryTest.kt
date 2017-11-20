@@ -1,13 +1,17 @@
-package land.eies.poolmate.configuration
+package land.eies.graphql
 
+import graphql.language.FieldDefinition
+import graphql.language.ObjectTypeDefinition
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
-import land.eies.graphql.GraphQLSpringWiringFactory
+import graphql.schema.idl.FieldWiringEnvironment
 import land.eies.graphql.annotation.GraphQLDataFetcher
 import land.eies.graphql.annotation.GraphQLFieldBinding
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito
+import org.mockito.Mockito.mock
 import org.springframework.beans.factory.ListableBeanFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
@@ -20,21 +24,30 @@ import org.springframework.test.context.junit4.SpringRunner
 class GraphQLSpringWiringFactoryTest {
 
     @Autowired
-    lateinit var graphQLSpringWiringFactory: GraphQLSpringWiringFactory
+    lateinit private var graphQLSpringWiringFactory: GraphQLSpringWiringFactory
 
     @Test
-    fun resolveDataFetcher() {
-        graphQLSpringWiringFactory.resolveDataFetcher("fieldNameA", "parentTypeA").let { dataFetcher ->
+    fun getDataFetcher() {
+        graphQLSpringWiringFactory.getDataFetcher(fieldWiringEnvironment("fieldNameA", "parentTypeA")).let { dataFetcher ->
             assertThat(dataFetcher).isSameAs(TestDataFetcherA)
         }
 
-        graphQLSpringWiringFactory.resolveDataFetcher("fieldNameB", "parentTypeB").let { dataFetcher ->
+        graphQLSpringWiringFactory.getDataFetcher(fieldWiringEnvironment("fieldNameB", "parentTypeB")).let { dataFetcher ->
             assertThat(dataFetcher).isSameAs(TestDataFetcherB)
         }
 
-        graphQLSpringWiringFactory.resolveDataFetcher("fieldNameC", "parentTypeC").let { dataFetcher ->
+        graphQLSpringWiringFactory.getDataFetcher(fieldWiringEnvironment("fieldNameC", "parentTypeC")).let { dataFetcher ->
             assertThat(dataFetcher).isSameAs(TestDataFetcherB)
         }
+    }
+
+    private fun fieldWiringEnvironment(fieldName: String, parentType: String): FieldWiringEnvironment {
+        val fieldWiringEnvironment = mock(FieldWiringEnvironment::class.java)
+
+        Mockito.`when`(fieldWiringEnvironment.fieldDefinition).thenReturn(FieldDefinition(fieldName))
+        Mockito.`when`(fieldWiringEnvironment.parentType).thenReturn(ObjectTypeDefinition(parentType))
+
+        return fieldWiringEnvironment
     }
 
     @Configuration

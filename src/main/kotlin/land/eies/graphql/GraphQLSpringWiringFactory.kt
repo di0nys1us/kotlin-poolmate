@@ -1,14 +1,36 @@
 package land.eies.graphql
 
 import graphql.schema.DataFetcher
+import graphql.schema.TypeResolver
 import graphql.schema.idl.FieldWiringEnvironment
+import graphql.schema.idl.InterfaceWiringEnvironment
+import graphql.schema.idl.UnionWiringEnvironment
 import graphql.schema.idl.WiringFactory
 import land.eies.graphql.annotation.GraphQLDataFetcher
+import land.eies.graphql.annotation.GraphQLTypeResolver
 import org.springframework.beans.factory.ListableBeanFactory
 
-class GraphQLSpringWiringFactory(val listableBeanFactory: ListableBeanFactory) : WiringFactory {
+class GraphQLSpringWiringFactory(private val listableBeanFactory: ListableBeanFactory) : WiringFactory {
 
-    fun resolveDataFetcher(fieldName: String, parentType: String): DataFetcher<*>? {
+    override fun providesDataFetcher(environment: FieldWiringEnvironment?): Boolean =
+            resolveDataFetcher(environment!!.fieldDefinition.name, environment.parentType.name) != null
+
+    override fun getDataFetcher(environment: FieldWiringEnvironment?): DataFetcher<*> =
+            resolveDataFetcher(environment!!.fieldDefinition.name, environment.parentType.name)!!
+
+    override fun providesTypeResolver(environment: InterfaceWiringEnvironment?): Boolean =
+            resolveTypeResolver(environment!!.interfaceTypeDefinition.name) != null
+
+    override fun getTypeResolver(environment: InterfaceWiringEnvironment?): TypeResolver =
+            resolveTypeResolver(environment!!.interfaceTypeDefinition.name)!!
+
+    override fun providesTypeResolver(environment: UnionWiringEnvironment?): Boolean =
+            resolveTypeResolver(environment!!.unionTypeDefinition.name) != null
+
+    override fun getTypeResolver(environment: UnionWiringEnvironment?): TypeResolver =
+            resolveTypeResolver(environment!!.unionTypeDefinition.name)!!
+
+    private fun resolveDataFetcher(fieldName: String, parentType: String): DataFetcher<*>? {
         val candidates = listableBeanFactory.getBeansOfType(DataFetcher::class.java)
                 .filter { beanEntry ->
                     listableBeanFactory.findAnnotationOnBean(beanEntry.key, GraphQLDataFetcher::class.java).let { annotation ->
@@ -25,19 +47,18 @@ class GraphQLSpringWiringFactory(val listableBeanFactory: ListableBeanFactory) :
         return candidates.values.firstOrNull()
     }
 
-    override fun providesDataFetcher(environment: FieldWiringEnvironment?): Boolean {
-        if (environment == null) {
-            return super.providesDataFetcher(environment)
+    private fun resolveTypeResolver(typeName: String): TypeResolver? {
+        val candidates = listableBeanFactory.getBeansOfType(TypeResolver::class.java)
+                .filter { beanEntry ->
+                    listableBeanFactory.findAnnotationOnBean(beanEntry.key, GraphQLTypeResolver::class.java).let { annotation ->
+                        annotation != null && annotation.typeName == typeName
+                    }
+                }
+
+        if (candidates.size > 1) {
+            throw IllegalStateException("${candidates.size} type resolvers defined for typeName = \"$typeName\", expected only one")
         }
 
-        return resolveDataFetcher(environment.fieldDefinition.name, environment.parentType.name) != null
-    }
-
-    override fun getDataFetcher(environment: FieldWiringEnvironment?): DataFetcher<*> {
-        if (environment == null) {
-            return super.getDataFetcher(environment)
-        }
-
-        return resolveDataFetcher(environment.fieldDefinition.name, environment.parentType.name) ?: return super.getDataFetcher(environment)
+        return candidates.values.firstOrNull()
     }
 }
