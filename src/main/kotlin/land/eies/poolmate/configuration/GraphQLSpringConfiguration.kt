@@ -34,6 +34,7 @@ class GraphQLSpringConfiguration {
             RuntimeWiring.newRuntimeWiring()
                     .scalar(Scalars.GraphQLDuration)
                     .scalar(Scalars.GraphQLLocalDate)
+                    .scalar(Scalars.GraphQLEmail)
                     .wiringFactory(GraphQLSpringWiringFactory(listableBeanFactory))
                     .build()
 

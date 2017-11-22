@@ -14,17 +14,13 @@ class Scalars {
     companion object {
 
         val GraphQLDuration = GraphQLScalarType("Duration", "java.time.Duration", object : Coercing<Duration?, Duration?> {
-            override fun serialize(input: Any?): Duration? {
-                return convert(input) ?: throw CoercingSerializeException("Invalid input '$input' for Duration")
-            }
+            override fun serialize(input: Any?): Duration? =
+                    convert(input) ?: throw CoercingSerializeException("Invalid input '$input' for Duration")
 
-            override fun parseValue(input: Any?): Duration? {
-                return convert(input) ?: throw CoercingParseValueException("Invalid input '$input' for Duration")
-            }
+            override fun parseValue(input: Any?): Duration? =
+                    convert(input) ?: throw CoercingParseValueException("Invalid input '$input' for Duration")
 
-            override fun parseLiteral(input: Any?): Duration? {
-                return convert(input)
-            }
+            override fun parseLiteral(input: Any?): Duration? = convert(input)
 
             private fun convert(input: Any?): Duration? {
                 when (input) {
@@ -46,17 +42,13 @@ class Scalars {
         })
 
         val GraphQLLocalDate = GraphQLScalarType("LocalDate", "java.time.LocalDate", object : Coercing<LocalDate?, LocalDate?> {
-            override fun serialize(input: Any?): LocalDate? {
-                return convert(input) ?: throw CoercingSerializeException("Invalid input '$input' for LocalDate")
-            }
+            override fun serialize(input: Any?): LocalDate? =
+                    convert(input) ?: throw CoercingSerializeException("Invalid input '$input' for LocalDate")
 
-            override fun parseValue(input: Any?): LocalDate? {
-                return convert(input) ?: throw CoercingParseValueException("Invalid input '$input' for LocalDate")
-            }
+            override fun parseValue(input: Any?): LocalDate? =
+                    convert(input) ?: throw CoercingParseValueException("Invalid input '$input' for LocalDate")
 
-            override fun parseLiteral(input: Any?): LocalDate? {
-                return convert(input)
-            }
+            override fun parseLiteral(input: Any?): LocalDate? = convert(input)
 
             private fun convert(input: Any?): LocalDate? {
                 when (input) {
@@ -74,6 +66,29 @@ class Scalars {
                 } catch (e: DateTimeParseException) {
                     null
                 }
+            }
+        })
+
+        val GraphQLEmail = GraphQLScalarType("Email", "java.lang.String", object : Coercing<String?, String?> {
+            override fun serialize(input: Any?): String? =
+                    convert(input) ?: throw CoercingSerializeException("Invalid input '$input' for Email")
+
+            override fun parseValue(input: Any?): String? =
+                    convert(input) ?: throw CoercingParseValueException("Invalid input '$input' for Email")
+
+            override fun parseLiteral(input: Any?): String? = convert(input)
+
+            private fun convert(input: Any?): String? {
+                when (input) {
+                    is String -> return parse(input)
+                    is StringValue -> return parse(input.value)
+                }
+
+                return null
+            }
+
+            private fun parse(input: String): String? {
+                return ""
             }
         })
     }

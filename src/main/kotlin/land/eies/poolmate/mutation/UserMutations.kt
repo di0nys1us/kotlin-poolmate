@@ -56,7 +56,7 @@ class CreateUserMutation(
             val violations = validator.validate<Any?>(input)
 
             if (violations.isNotEmpty()) {
-                throw ValidationException(violations)
+                throw ValidationException()
             }
 
             val user = User(

@@ -116,6 +116,8 @@
     </dependencies>
 
     <build>
+        <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+        <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
         <plugins>
             <plugin>
                 <artifactId>kotlin-maven-plugin</artifactId>
@@ -127,35 +129,22 @@
                         <goals>
                             <goal>compile</goal>
                         </goals>
-                        <configuration>
-                            <sourceDirs>
-                                <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
-                                <sourceDir>${project.basedir}/src/main/java</sourceDir>
-                            </sourceDirs>
-                        </configuration>
                     </execution>
                     <execution>
                         <id>test-compile</id>
                         <goals>
                             <goal>test-compile</goal>
                         </goals>
-                        <configuration>
-                            <sourceDirs>
-                                <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
-                                <sourceDir>${project.basedir}/src/test/java</sourceDir>
-                            </sourceDirs>
-                        </configuration>
                     </execution>
                 </executions>
-
                 <configuration>
+                    <languageVersion>1.1</languageVersion>
                     <jvmTarget>${java.version}</jvmTarget>
                     <compilerPlugins>
                         <plugin>jpa</plugin>
                         <plugin>spring</plugin>
                     </compilerPlugins>
                 </configuration>
-
                 <dependencies>
                     <dependency>
                         <groupId>org.jetbrains.kotlin</groupId>
@@ -168,37 +157,6 @@
                         <version>${kotlin.version}</version>
                     </dependency>
                 </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
-                <executions>
-                    <!-- Replacing default-compile as it is treated specially by maven -->
-                    <execution>
-                        <id>default-compile</id>
-                        <phase>none</phase>
-                    </execution>
-                    <!-- Replacing default-testCompile as it is treated specially by maven -->
-                    <execution>
-                        <id>default-testCompile</id>
-                        <phase>none</phase>
-                    </execution>
-                    <execution>
-                        <id>java-compile</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>java-test-compile</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
